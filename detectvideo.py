@@ -47,7 +47,7 @@ def export_bbox(image, bboxes):
         score = out_scores[0][i]
         class_ind = int(out_classes[0][i])
         result['bbox'] = coor.tolist()
-        result['score'] = score
+        result['score'] = score.astype(float)
         result['label'] = class_ind
         annotations.append(result)
     return annotations
