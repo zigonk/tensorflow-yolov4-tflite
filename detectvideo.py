@@ -30,9 +30,10 @@ flags.DEFINE_boolean('verbose', False, 'Log current frame id')
 flags.DEFINE_string('output_format', 'XVID', 'codec used in VideoWriter when saving video to file')
 flags.DEFINE_boolean('dis_cv2_window', False, 'disable cv2 window during the process') # this is good for the .ipynb
 
-def export_bbox(bboxes):
+def export_bbox(image, bboxes):
     out_boxes, out_scores, out_classes, num_boxes = bboxes
     annotations = []
+    image_h, image_w, _ = image.shape
     for i in range(num_boxes[0]):
         result = {}
         if int(out_classes[0][i]) < 0 or int(out_classes[0][i]) > 20: continue
@@ -145,7 +146,7 @@ def main(_argv):
             )
             pred_bbox = [boxes.numpy(), scores.numpy(), classes.numpy(), valid_detections.numpy()]
             image = utils.draw_bbox(frame, pred_bbox)
-            record['annotations'] = export_bbox(pred_bbox)
+            record['annotations'] = export_bbox(frame, pred_bbox)
             with open(output_bbox, 'a') as f:
                 json.dump(record, f, indent=4)
                 f.write(',')
