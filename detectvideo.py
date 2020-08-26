@@ -70,6 +70,10 @@ def main(_argv):
         output_bbox = os.path.join(bbox_path, video_id + '.json')
         output_fname = os.path.join(output_vid, video_id + '.avi')
         video_fname = os.path.join(video_path, video_id + '.mp4')
+
+        print("Video path:" + video_fname)
+        print("Output path:" + output_fname)
+        print("Bbox path:" + output_bbox)
         vid = cv2.VideoCapture(video_fname)
 
         if FLAGS.framework == 'tflite':
