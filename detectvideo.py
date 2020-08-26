@@ -25,6 +25,7 @@ flags.DEFINE_float('iou', 0.3, 'iou threshold')
 flags.DEFINE_float('score', 0.25, 'score threshold')
 flags.DEFINE_string('output', None, 'path to output video')
 flags.DEFINE_string('bbox_path', None, 'path to bbox json')
+flags.DEFINE_boolean('verbose', False, 'Log current frame id')
 flags.DEFINE_string('output_format', 'XVID', 'codec used in VideoWriter when saving video to file')
 flags.DEFINE_boolean('dis_cv2_window', False, 'disable cv2 window during the process') # this is good for the .ipynb
 
@@ -63,6 +64,7 @@ def main(_argv):
     for ind in range(1, 26):
         record = {}
         record['videoID'] = ind
+        print("Start running video {}".format(ind))
 
         video_id = 'cam_' + ind.zfill(2)
         output_bbox = os.path.join(bbox_path, video_id + '.json')
@@ -156,7 +158,10 @@ def main(_argv):
 
             if FLAGS.output:
                 out.write(result)
-
+            if (FLAGS.verbose):
+                print("FrameID: {}".format(frame_id))
+                print("Video ID: {}".format(ind))
+                print("Annotations count: {}".format(len(record['annotations'])))
             frame_id += 1
         with open(output_bbox, "a") as f:
             f.write(']')
