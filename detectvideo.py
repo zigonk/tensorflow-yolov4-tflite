@@ -66,7 +66,7 @@ def main(_argv):
         record['videoID'] = ind
         print("Start running video {}".format(ind))
 
-        video_id = 'cam_' + ind.zfill(2)
+        video_id = 'cam_' + str(ind).zfill(2)
         output_bbox = os.path.join(bbox_path, video_id + '.json')
         output_fname = os.path.join(output_vid, video_id + '.avi')
         video_fname = os.path.join(video_path, video_id + '.mp4')
