@@ -170,6 +170,7 @@ def main(_argv):
                 print("Video ID: {}".format(ind))
                 print("Annotations count: {}".format(len(record['annotations'])))
             frame_id += 1
+        out.release()
         with open(output_bbox, "a") as f:
             f.write(']')
 
