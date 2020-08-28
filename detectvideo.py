@@ -101,6 +101,7 @@ def main(_argv):
         frame_id = 0
         with open(output_bbox, "w") as f:
             f.write('[\n')
+        prev_time = time.time()
         while True:
             record['frameID'] = frame_id
             return_value, frame = vid.read()
@@ -117,7 +118,6 @@ def main(_argv):
             image_data = cv2.resize(frame, (input_size, input_size))
             image_data = image_data / 255.
             image_data = image_data[np.newaxis, ...].astype(np.float32)
-            prev_time = time.time()
 
             if FLAGS.framework == 'tflite':
                 interpreter.set_tensor(input_details[0]['index'], image_data)
@@ -149,14 +149,9 @@ def main(_argv):
             image = utils.draw_bbox(frame, pred_bbox)
             record['annotations'] = export_bbox(frame, pred_bbox)
             with open(output_bbox, 'a') as f:
-                if (frame > 0):
+                if (frame_id > 0):
                     f.write(",\n")
                 json.dump(record, f, indent=4)
-            curr_time = time.time()
-            exec_time = curr_time - prev_time
-            result = np.asarray(image)
-            info = "time: %.2f ms" %(1000*exec_time)
-            # print(info)
 
             result = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             if not FLAGS.dis_cv2_window:
@@ -171,6 +166,10 @@ def main(_argv):
                 print("Video ID: {}".format(ind))
                 print("Annotations count: {}".format(len(record['annotations'])))
             frame_id += 1
+        curr_time = time.time()
+        exec_time = curr_time - prev_time
+        info = "time: %.2f ms" %(1000*exec_time)
+        # print(info)
         out.release()
         with open(output_bbox, "a") as f:
             f.write(']')
