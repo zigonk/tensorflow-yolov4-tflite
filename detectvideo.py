@@ -171,6 +171,7 @@ def main(_argv):
         info = "time: %.2f ms" %(1000*exec_time)
         # print(info)
         out.release()
+        vid.release()
         with open(output_bbox, "a") as f:
             f.write(']')
 
