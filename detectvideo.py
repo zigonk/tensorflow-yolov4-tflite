@@ -39,10 +39,10 @@ def export_bbox(image, bboxes):
         result = {}
         if int(out_classes[0][i]) < 0 or int(out_classes[0][i]) > 20: continue
         coor = out_boxes[0][i]
-        coor[0] = int(coor[0] * image_h)
-        coor[2] = int(coor[2] * image_h)
-        coor[1] = int(coor[1] * image_w)
-        coor[3] = int(coor[3] * image_w)
+        coor[0] = int(coor[0])
+        coor[2] = int(coor[2])
+        coor[1] = int(coor[1])
+        coor[3] = int(coor[3])
 
         score = out_scores[0][i]
         class_ind = int(out_classes[0][i])
@@ -149,8 +149,9 @@ def main(_argv):
             image = utils.draw_bbox(frame, pred_bbox)
             record['annotations'] = export_bbox(frame, pred_bbox)
             with open(output_bbox, 'a') as f:
+                if (frame > 0):
+                    f.write(",\n")
                 json.dump(record, f, indent=4)
-                f.write(',')
             curr_time = time.time()
             exec_time = curr_time - prev_time
             result = np.asarray(image)
